@@ -16,15 +16,7 @@
         <div id="container">
             <div id="wrapper">
                 <div id="top">
-                    <div class="logo"><a href="http://www.free-css.com/"><span>MOBILE</span> CLICKERS</a></div>
-                    <ul class="login">
-                        <li class="left">&nbsp;</li>
-                        <li>Hello Guest!</li>
-                        <li>|</li>
-                        <li><a href="login.xhtml">Login</a></li>
-                        <li>|</li>
-                        <li><a href="register.xhtml">Register</a></li>
-                    </ul>
+                    <ui:include src="WEB-INF/includes/login.xhtml"/>
                 </div>
 
                 <ui:include src="WEB-INF/includes/navigation.xhtml"/>
@@ -38,9 +30,9 @@
                         <h:panelGrid columns="2">
                             <label>Title:</label>
                             <h:selectOneMenu value="#{accountManagedBean.title}">
-                                <f:selectItem itemLabel="Mr" itemValue="Mr" />
-                                <f:selectItem itemLabel="Ms" itemValue="Ms" />
-                                <f:selectItem itemLabel="Dr" itemValue="Dr" />
+                                <f:selectItem itemLabel="Mr." itemValue="Mr." />
+                                <f:selectItem itemLabel="Mrs." itemValue="Mrs." />
+                                <f:selectItem itemLabel="Dr." itemValue="Dr." />
                             </h:selectOneMenu>
 
                             <label>First Name:</label>

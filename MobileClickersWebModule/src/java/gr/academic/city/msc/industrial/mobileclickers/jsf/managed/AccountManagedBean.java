@@ -8,6 +8,7 @@ import gr.academic.city.msc.industrial.mobileclickers.ejb.exception.AccountExcep
 import gr.academic.city.msc.industrial.mobileclickers.ejb.session.AccountService;
 import gr.academic.city.msc.industrial.mobileclickers.ejb.session.SystemWideServices;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Department;
+import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -19,7 +20,7 @@ import javax.faces.bean.RequestScoped;
  */
 @ManagedBean(name = "accountManagedBean")
 @RequestScoped
-public class AccountManagedBean {
+public class AccountManagedBean implements Serializable{
 
     @EJB
     private SystemWideServices systemWideServices;

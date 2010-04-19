@@ -21,23 +21,23 @@ public class Answer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String longAnswer;
-    private String shortAnswer;
+    private String answerText;
+    private char letter;
 
-    public String getLongAnswer() {
-        return longAnswer;
+    public String getAnswerText() {
+        return answerText;
     }
 
-    public void setLongAnswer(String longAnswer) {
-        this.longAnswer = longAnswer;
+    public void setAnswerText(String answerText) {
+        this.answerText = answerText;
     }
 
-    public String getShortAnswer() {
-        return shortAnswer;
+    public char getLetter() {
+        return letter;
     }
 
-    public void setShortAnswer(String shortAnswer) {
-        this.shortAnswer = shortAnswer;
+    public void setLetter(char letter) {
+        this.letter = letter;
     }
 
     public Long getId() {
