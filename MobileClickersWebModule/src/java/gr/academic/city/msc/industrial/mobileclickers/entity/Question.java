@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -29,9 +30,8 @@ public class Question implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToMany(mappedBy = "questions", cascade=CascadeType.ALL)
-    @JoinColumn(nullable=false)
-    private List<Course> courses;
+    @ManyToOne
+    private Course course;
     private String question;
     @ManyToMany(cascade=CascadeType.ALL)
     @JoinColumn(nullable=false)
@@ -59,12 +59,12 @@ public class Question implements Serializable {
         this.correctAnswer = correctAnswer;
     }
 
-    public List<Course> getCourses() {
-        return courses;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public List<Answer> getPossibleAnswers() {

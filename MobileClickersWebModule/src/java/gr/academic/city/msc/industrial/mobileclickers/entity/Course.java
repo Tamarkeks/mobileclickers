@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -30,8 +31,8 @@ public class Course implements Serializable {
     private List<Lecturer> lecturers;
     private String name;
     private String code;
-    @ManyToMany(cascade=CascadeType.ALL)
     @JoinColumn(nullable=false)
+    @OneToMany(mappedBy = "course")
     private List<Question> questions;
     @ManyToMany(mappedBy = "courses", cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)

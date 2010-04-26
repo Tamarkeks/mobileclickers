@@ -34,7 +34,7 @@ public class AnsweredQuestion implements Serializable {
     private Question question;
     @JoinColumn(nullable=false)
     @ManyToMany(cascade=CascadeType.ALL)
-    private List<Answer> submitedAnswers;
+    private List<SubmitedAnswer> submitedAnswers;
     private String questionCode;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date issueDate;
@@ -74,13 +74,14 @@ public class AnsweredQuestion implements Serializable {
         this.questionCode = questionCode;
     }
 
-    public List<Answer> getSubmitedAnswers() {
+    public List<SubmitedAnswer> getSubmitedAnswers() {
         return submitedAnswers;
     }
 
-    public void setSubmitedAnswers(List<Answer> submitedAnswers) {
+    public void setSubmitedAnswers(List<SubmitedAnswer> submitedAnswers) {
         this.submitedAnswers = submitedAnswers;
     }
+
     public Long getId() {
         return id;
     }

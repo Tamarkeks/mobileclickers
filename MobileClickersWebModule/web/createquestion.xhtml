@@ -5,7 +5,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
-        <title>Mobile Clickers - Registration</title>
+        <title>Mobile Clickers - Create New Question</title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="css/style.css" type="text/css" />
         <script type="text/javascript" src="js/mootools-release-1.11.js"></script>
@@ -28,6 +28,13 @@
                     <h1>Create Question Form</h1>
                     <h:form>
                         <h:panelGrid columns="1">
+                            <label>Course:</label>
+                            <h:selectOneMenu value="#{questionManagedBean.courseID}">
+                                <f:selectItems value="#{questionManagedBean.coursesTaught}"
+                                               var="course"
+                                               itemLabel="#{course.name} (#{course.code})"
+                                               itemValue="#{course.id}"/>
+                            </h:selectOneMenu>
                             <label>Question:</label>
                             <h:inputTextarea cols="50" rows="6" value="#{questionManagedBean.questionText}"/>
                         </h:panelGrid>

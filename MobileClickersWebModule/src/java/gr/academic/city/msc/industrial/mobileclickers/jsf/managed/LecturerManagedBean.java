@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package gr.academic.city.msc.industrial.mobileclickers.jsf.managed;
 
 import gr.academic.city.msc.industrial.mobileclickers.ejb.exception.AccountException;
@@ -16,9 +15,10 @@ import javax.faces.bean.SessionScoped;
  *
  * @author Ivo Neskovic <ivo.neskovic@gmail.com>
  */
-@ManagedBean(name="lecturerManagedBean")
+@ManagedBean(name = "lecturerManagedBean")
 @SessionScoped
-public class LecturerManagedBean implements Serializable{
+public class LecturerManagedBean implements Serializable {
+
     @EJB
     private AccountService accountService;
     private String username;
@@ -52,6 +52,10 @@ public class LecturerManagedBean implements Serializable{
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public long getLecturerID() {
+        return lecturerID;
     }
 
     public String logInActionHandler() {
