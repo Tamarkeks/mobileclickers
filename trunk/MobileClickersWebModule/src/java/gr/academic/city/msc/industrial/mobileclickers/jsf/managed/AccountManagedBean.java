@@ -48,7 +48,8 @@ public class AccountManagedBean implements Serializable{
     }
 
     public List<Department> getDepartments() {
-        return systemWideServices.getAllDepartments();
+        departments = systemWideServices.getAllDepartments();
+        return departments;
     }
 
     public void setDepartments(List<Department> departments) {

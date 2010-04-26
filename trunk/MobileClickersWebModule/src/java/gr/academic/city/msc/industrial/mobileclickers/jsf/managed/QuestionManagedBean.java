@@ -5,7 +5,9 @@
 package gr.academic.city.msc.industrial.mobileclickers.jsf.managed;
 
 import gr.academic.city.msc.industrial.mobileclickers.ejb.exception.QuestionException;
+import gr.academic.city.msc.industrial.mobileclickers.ejb.session.CourseService;
 import gr.academic.city.msc.industrial.mobileclickers.ejb.session.QuestionService;
+import gr.academic.city.msc.industrial.mobileclickers.entity.Course;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 /**
@@ -26,6 +29,8 @@ public class QuestionManagedBean implements Serializable {
 
     @EJB
     private QuestionService questionService;
+    @EJB
+    private CourseService courseService;
     private String questionText;
     private String answer1;
     private String answer2;
@@ -37,6 +42,8 @@ public class QuestionManagedBean implements Serializable {
     private char correctAnswer;
     private int shownAnswers;
     private List<SelectItem> correctAnswersSelectItems;
+    private List<Course> coursesTaught;
+    private long courseID;
 
     /** Creates a new instance of QuestionManagedBean */
     public QuestionManagedBean() {
@@ -135,6 +142,25 @@ public class QuestionManagedBean implements Serializable {
         this.correctAnswersSelectItems = correctAnswersSelectItems;
     }
 
+    public List<Course> getCoursesTaught() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        LecturerManagedBean lmb = context.getApplication().evaluateExpressionGet(context, "#{lecturerManagedBean}", LecturerManagedBean.class);
+        coursesTaught = courseService.getCoursesForLecturer(lmb.getLecturerID());
+        return coursesTaught;
+    }
+
+    public void setCoursesTaught(List<Course> coursesTaught) {
+        this.coursesTaught = coursesTaught;
+    }
+
+    public long getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(long courseID) {
+        this.courseID = courseID;
+    }
+
     public String createQuestionActionHandler() {
         Map<Character, String> possibleAnswers = new HashMap<Character, String>();
 
@@ -157,7 +183,7 @@ public class QuestionManagedBean implements Serializable {
 
         try {
             errorMessage = null;
-            questionService.createQuestion(questionText, possibleAnswers, correctAnswer);
+            questionService.createQuestion(questionText, possibleAnswers, correctAnswer, courseID);
             resetForm();
         } catch (QuestionException ex) {
             errorMessage = ex.getMessage();

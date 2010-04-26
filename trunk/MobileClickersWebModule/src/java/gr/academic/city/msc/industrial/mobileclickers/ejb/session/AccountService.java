@@ -5,8 +5,10 @@
 package gr.academic.city.msc.industrial.mobileclickers.ejb.session;
 
 import gr.academic.city.msc.industrial.mobileclickers.ejb.exception.AccountException;
+import gr.academic.city.msc.industrial.mobileclickers.entity.Course;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Department;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Lecturer;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -46,6 +48,7 @@ public class AccountService {
             lecturer.setLastName(lastName);
             lecturer.setUsername(username);
             lecturer.setPassword(password);
+            lecturer.setCoursesTaught(new ArrayList<Course>());
 
             Department department = em.find(Department.class, deparmentID);
             lecturer.setDepartment(department);
