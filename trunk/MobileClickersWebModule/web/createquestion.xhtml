@@ -37,6 +37,17 @@
                             </h:selectOneMenu>
                             <label>Question:</label>
                             <h:inputTextarea cols="50" rows="6" value="#{questionManagedBean.questionText}"/>
+                            <label>Tags:</label>
+                            <h:inputText value="#{questionManagedBean.tagString}" size="42"/>
+                            <label>Chart Type:</label>
+                            <h:selectOneRadio value="#{questionManagedBean.chartType}">
+                                <f:selectItem itemLabel="Pie" itemValue="PIE" />
+                                <f:selectItem itemLabel="Pie 3D" itemValue="PIE3D" />
+                                <f:selectItem itemLabel="Bar" itemValue="BAR" />
+                                <f:selectItem itemLabel="Bar 3D" itemValue="BAR3D" />
+                                <f:selectItem itemLabel="Line" itemValue="LINE" />
+                            </h:selectOneRadio>
+                            <label>Possible Answers:</label>
                         </h:panelGrid>
 
                         <h:panelGrid columns="3">

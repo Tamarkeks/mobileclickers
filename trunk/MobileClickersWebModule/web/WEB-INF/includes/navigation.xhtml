@@ -8,29 +8,15 @@ and open the template in the editor.
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition>
-        <ul id="nav">
-            <li class="left">&nbsp;</li>
-            <li><a class="active" href="http://www.free-css.com/">Home</a></li>
-            <li> <a href="http://www.free-css.com/">Drop Down example <img src="images/nav_bullet.jpg" alt="" /></a>
-                <ul>
-                    <li><a href="http://www.free-css.com/">Our shcool</a></li>
-                    <li><a href="http://www.free-css.com/">Location</a></li>
-                    <li><a href="http://www.free-css.com/">Staff</a></li>
-                </ul>
-            </li>
-            <li> <a href="http://www.free-css.com/">Topics <img src="images/nav_bullet.jpg" alt="" /></a>
-                <ul>
-                    <li><a href="http://www.free-css.com/">Math</a></li>
-                    <li><a href="http://www.free-css.com/">English</a></li>
-                    <li><a href="http://www.free-css.com/">Art &amp; Music</a></li>
-                    <li><a href="http://www.free-css.com/">Science &amp; Tech</a></li>
-                </ul>
-            </li>
-            <li><a href="http://www.free-css.com/">Teachers Space</a></li>
-            <li><a href="http://www.free-css.com/">Parents Space</a></li>
-            <li><a href="http://www.free-css.com/">Contact Us</a></li>
-            <li class="sep">&nbsp;</li>
-            <li class="right">&nbsp;</li>
-        </ul>
+        <h:form>
+            <ul id="nav">
+                <li class="left">&nbsp;</li>
+                <li><h:commandLink value="Home" action="index"/></li>
+                <li><h:commandLink value="Teachers Space" action="profile" rendered="#{lecturerManagedBean.loggedIn}"/></li>
+                <li><h:commandLink value="Contact Us" action="contact"/></li>
+                <li class="sep">&nbsp;</li>
+                <li class="right">&nbsp;</li>
+            </ul>
+        </h:form>
     </ui:composition>
 </html>

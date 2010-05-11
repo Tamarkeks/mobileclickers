@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Mobile Clickers - Question #{questionDetailsManagedBean.questionID}</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="css/style.css" type="text/css" />
+        <script type="text/javascript" src="js/mootools-release-1.11.js"></script>
+        <script src="js/dropDownMenu.js" type="text/javascript"></script>
+        <!--[if IE 7]><style>#dropdownMenu li ul ul {margin-left: 100px;}</style><![endif]-->
+    </h:head>
+    <h:body>
+        <div id="container">
+            <div id="wrapper">
+                <div id="top">
+                    <ui:include src="WEB-INF/includes/login.xhtml"/>
+                </div>
+
+                <ui:include src="WEB-INF/includes/navigation.xhtml"/>
+
+                <div id="header">
+                    <ui:include src="WEB-INF/includes/header.xhtml"/>
+                </div>
+                <div id="content">
+                    <h1>Question #{questionDetailsManagedBean.questionID}</h1>
+                    <strong><i>"#{questionDetailsManagedBean.question.question}"</i></strong>
+                    <h:dataTable border="0" value="#{questionDetailsManagedBean.question.possibleAnswers}" var="answer">
+                        <h:column>
+                            <h:outputText value="#{answer.letter}" style="color: red; font-style: oblique" rendered="#{answer == questionDetailsManagedBean.question.correctAnswer}"/>
+                            <h:outputText value="#{answer.letter}" rendered="#{answer != questionDetailsManagedBean.question.correctAnswer}"/>
+                        </h:column>
+                        <h:column>
+                            <h:outputText value="#{answer.answerText}" style="color: red; font-style: oblique" rendered="#{answer == questionDetailsManagedBean.question.correctAnswer}"/>
+                            <h:outputText value="#{answer.answerText}" rendered="#{answer != questionDetailsManagedBean.question.correctAnswer}"/>
+                        </h:column>
+                    </h:dataTable>
+                    <h2>Success Rate</h2>
+                    Here graph!
+                    <h2>Issued instances</h2>
+                    <h:form>
+                        <h:dataTable border="0" value="#{questionDetailsManagedBean.question.answeredQuestions}" var="answeredQuestion">
+                            <h:column>
+                                <h4>Issue Code: #{answeredQuestion.questionCode}</h4>
+                                Issued by: #{answeredQuestion.issuer.title} #{answeredQuestion.issuer.firstName} #{answeredQuestion.issuer.lastName}
+                                on #{answeredQuestion.issueDate}
+                                <p>
+                                    Status: <h:outputText value="#{answeredQuestion.status}" style="color: green" rendered="#{answeredQuestion.status == 'ACTIVE'}" />
+                                            <h:outputText value="#{answeredQuestion.status}" style="color: red" rendered="#{answeredQuestion.status == 'INACTIVE'}" />
+                                </p>
+                                <p>
+                                    <h:commandLink value="Stop" action="#{issuedQuestionManagedBean.stopQuestionActionHandler}" rendered="#{answeredQuestion.status == 'ACTIVE'}">
+                                        <f:setPropertyActionListener target="#{issuedQuestionManagedBean.issuedQuestionID}" value="#{answeredQuestion.id}" />
+                                    </h:commandLink>
+                                </p>
+                                <h:graphicImage value="http://localhost:8080/#{answeredQuestion.questionCode}.png" style="padding: 1px; border: 1px; border-color: black; border-style: solid"/>
+                                <br /><br />
+                                <hr />
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+                <div id="sidebar">
+                    <h2>News &amp; Announcements</h2>
+                    <ui:include src="WEB-INF/includes/news.xhtml"/>
+                    <h2>Advertising</h2>
+                    <ui:include src="WEB-INF/includes/ads.xhtml"/>
+                </div>
+                <div id="footer">
+                    <ui:include src="WEB-INF/includes/footer.xhtml"/>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
