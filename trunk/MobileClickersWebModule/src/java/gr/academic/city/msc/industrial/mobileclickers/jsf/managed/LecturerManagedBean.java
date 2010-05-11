@@ -10,6 +10,8 @@ import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -25,9 +27,19 @@ public class LecturerManagedBean implements Serializable {
     private String password;
     private String errorMessage;
     private long lecturerID;
+    private boolean loggedIn = false;
+    private String alias;
 
     /** Creates a new instance of LecturerManagedBean */
     public LecturerManagedBean() {
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getPassword() {
@@ -58,15 +70,40 @@ public class LecturerManagedBean implements Serializable {
         return lecturerID;
     }
 
+    public void setLecturerID(long lecturerID) {
+        this.lecturerID = lecturerID;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
     public String logInActionHandler() {
         try {
             errorMessage = null;
             lecturerID = accountService.authenticate(username, password);
+            loggedIn = true;
+            alias = accountService.getAccountAlias(lecturerID);
         } catch (AccountException ex) {
             errorMessage = ex.getMessage();
             return null;
         }
 
         return "profile";
+    }
+
+    public String logOutActionHandler() {
+        //invalidate user session
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
+        session.invalidate();
+
+        loggedIn = false;
+        
+        return "index";
     }
 }

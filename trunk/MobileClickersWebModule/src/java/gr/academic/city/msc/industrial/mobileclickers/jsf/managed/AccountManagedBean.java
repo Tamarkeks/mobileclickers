@@ -13,6 +13,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -107,7 +108,13 @@ public class AccountManagedBean implements Serializable{
     public String registerActionHandler() {
         try {
             errorMessage = null;
-            accountService.registerLecturer(firstName, lastName, title, departmentID, username, password);
+            long lecturerID = accountService.registerLecturer(firstName, lastName, title, departmentID, username, password);
+            
+            FacesContext context = FacesContext.getCurrentInstance();
+            LecturerManagedBean lmb = context.getApplication().evaluateExpressionGet(context, "#{lecturerManagedBean}", LecturerManagedBean.class);
+            lmb.setLoggedIn(true);
+            lmb.setAlias(accountService.getAccountAlias(lecturerID));
+            lmb.setLecturerID(lecturerID);
         } catch (AccountException ex) {
             errorMessage = ex.getMessage();
             return null;

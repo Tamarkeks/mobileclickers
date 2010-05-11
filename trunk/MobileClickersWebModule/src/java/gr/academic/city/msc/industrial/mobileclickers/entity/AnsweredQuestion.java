@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,11 +38,21 @@ public class AnsweredQuestion implements Serializable {
     @ManyToMany(cascade=CascadeType.ALL)
     private List<SubmitedAnswer> submitedAnswers;
     private String questionCode;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date issueDate;
     @ManyToOne(cascade=CascadeType.ALL, optional=false)
     @JoinColumn(nullable=false)
     private Lecturer issuer;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public Lecturer getIssuer() {
         return issuer;

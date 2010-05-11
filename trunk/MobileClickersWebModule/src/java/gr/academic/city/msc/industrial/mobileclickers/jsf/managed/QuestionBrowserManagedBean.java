@@ -9,8 +9,10 @@ import gr.academic.city.msc.industrial.mobileclickers.ejb.session.CourseService;
 import gr.academic.city.msc.industrial.mobileclickers.ejb.session.QuestionService;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Course;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Question;
+import gr.academic.city.msc.industrial.mobileclickers.entity.Tag;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -20,9 +22,9 @@ import javax.faces.context.FacesContext;
  *
  * @author Ivo Neskovic <ivo.neskovic@gmail.com>
  */
-@ManagedBean(name = "issueQuestionManagedBean")
+@ManagedBean(name = "questionBrowserManagedBean")
 @SessionScoped
-public class IssueQuestionManagedBean implements Serializable {
+public class QuestionBrowserManagedBean implements Serializable {
 
     @EJB
     private QuestionService questionService;
@@ -30,17 +32,14 @@ public class IssueQuestionManagedBean implements Serializable {
     private CourseService courseService;
     private List<Course> coursesTaught;
     private List<Question> questionsForCourse;
+    private Set<Tag> tagsForCourse;
     private long questionID;
     private long courseID = 0;
+    private long tagID;
     private String errorMessage;
 
-    /** Creates a new instance of IssueQuestionManagedBean */
-    public IssueQuestionManagedBean() {
-        /*FacesContext context = FacesContext.getCurrentInstance();
-        LecturerManagedBean lmb = context.getApplication().evaluateExpressionGet(context, "#{lecturerManagedBean}", LecturerManagedBean.class);
-        coursesTaught = courseService.getCoursesForLecturer(lmb.getLecturerID());
-        questionsForCourse = questionService.getQuestionsForCourse(coursesTaught.get(0).getId());
-         */
+    /** Creates a new instance of QuestionBrowserManagedBean */
+    public QuestionBrowserManagedBean() {
     }
 
     public List<Course> getCoursesTaught() {
@@ -80,6 +79,12 @@ public class IssueQuestionManagedBean implements Serializable {
 
     public String getQuestionsActionHandler() {
         questionsForCourse = questionService.getQuestionsForCourse(courseID);
+        tagsForCourse = courseService.getTagsForCourse(courseID);
+        return null;
+    }
+
+    public String tagFilterActionHandler() {
+        questionsForCourse = questionService.filterQuestions(courseID, tagID);
         return null;
     }
 
@@ -89,6 +94,22 @@ public class IssueQuestionManagedBean implements Serializable {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public long getTagID() {
+        return tagID;
+    }
+
+    public void setTagID(long tagID) {
+        this.tagID = tagID;
+    }
+
+    public Set<Tag> getTagsForCourse() {
+        return tagsForCourse;
+    }
+
+    public void setTagsForCourse(Set<Tag> tagsForCourse) {
+        this.tagsForCourse = tagsForCourse;
     }
 
     public String issueQuestionActionHandler() {
