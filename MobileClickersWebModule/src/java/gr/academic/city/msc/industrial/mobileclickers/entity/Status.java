@@ -9,6 +9,6 @@ package gr.academic.city.msc.industrial.mobileclickers.entity;
  *
  * @author Ivo Neskovic <ivo.neskovic@gmail.com>
  */
-public enum Season {
-    SPRING, FALL
+public enum Status {
+    ACTIVE, INACTIVE
 }

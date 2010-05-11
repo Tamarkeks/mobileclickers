@@ -7,8 +7,11 @@ package gr.academic.city.msc.industrial.mobileclickers.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,6 +45,26 @@ public class Question implements Serializable {
     @OneToMany(mappedBy = "question", cascade=CascadeType.ALL)
     @JoinColumn(nullable=false)
     private List<AnsweredQuestion> answeredQuestions;
+    @OneToMany
+    private Set<Tag> tags;
+    @Enumerated(EnumType.STRING)
+    private ChartType chart;
+
+    public ChartType getChart() {
+        return chart;
+    }
+
+    public void setChart(ChartType chart) {
+        this.chart = chart;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 
     public List<AnsweredQuestion> getAnsweredQuestions() {
         return answeredQuestions;

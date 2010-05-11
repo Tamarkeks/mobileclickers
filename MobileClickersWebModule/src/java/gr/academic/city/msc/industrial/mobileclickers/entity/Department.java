@@ -61,6 +61,6 @@ public class Department implements Serializable {
 
     @Override
     public String toString() {
-        return "gr.academic.city.msc.industrial.mobileclickers.entity.Department[id=" + id + "]";
+        return this.getName();
     }
 }

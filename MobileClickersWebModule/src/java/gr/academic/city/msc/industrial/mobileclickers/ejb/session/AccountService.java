@@ -25,7 +25,7 @@ public class AccountService {
     @PersistenceContext
     private EntityManager em;
 
-    public void registerLecturer(String firstName, String lastName, String title, long deparmentID, String username, String password) throws AccountException {
+    public long registerLecturer(String firstName, String lastName, String title, long deparmentID, String username, String password) throws AccountException {
 
         if (firstName == null
                 || firstName.equals("")
@@ -54,6 +54,8 @@ public class AccountService {
             lecturer.setDepartment(department);
 
             em.persist(lecturer);
+
+            return lecturer.getId();
         } else {
             throw new AccountException("Username already exists!");
         }
@@ -75,5 +77,11 @@ public class AccountService {
         } else {
             return result.get(0).getId();
         }
+    }
+
+    public String getAccountAlias(long lecturerID) {
+        Lecturer lecturer = em.find(Lecturer.class, lecturerID);
+
+        return lecturer.getFirstName();
     }
 }

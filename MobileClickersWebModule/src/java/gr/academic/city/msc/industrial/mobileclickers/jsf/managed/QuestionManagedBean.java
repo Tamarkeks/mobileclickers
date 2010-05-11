@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -44,6 +45,8 @@ public class QuestionManagedBean implements Serializable {
     private List<SelectItem> correctAnswersSelectItems;
     private List<Course> coursesTaught;
     private long courseID;
+    private String tagString;
+    private String chartType;
 
     /** Creates a new instance of QuestionManagedBean */
     public QuestionManagedBean() {
@@ -52,6 +55,14 @@ public class QuestionManagedBean implements Serializable {
 
         correctAnswersSelectItems.add(new SelectItem('A', "A"));
         correctAnswersSelectItems.add(new SelectItem('B', "B"));
+    }
+
+    public String getChartType() {
+        return chartType;
+    }
+
+    public void setChartType(String chartType) {
+        this.chartType = chartType;
     }
 
     public String getErrorMessage() {
@@ -161,6 +172,14 @@ public class QuestionManagedBean implements Serializable {
         this.courseID = courseID;
     }
 
+    public String getTagString() {
+        return tagString;
+    }
+
+    public void setTagString(String tagString) {
+        this.tagString = tagString;
+    }
+
     public String createQuestionActionHandler() {
         Map<Character, String> possibleAnswers = new HashMap<Character, String>();
 
@@ -181,9 +200,15 @@ public class QuestionManagedBean implements Serializable {
             possibleAnswers.put(new Character('F'), answer6);
         }
 
+        List<String> tagStrings = new ArrayList<String>();
+        StringTokenizer tokenizer = new StringTokenizer(tagString, ",; ");
+        while (tokenizer.hasMoreTokens()) {
+            tagStrings.add(tokenizer.nextToken());
+        }
+        
         try {
             errorMessage = null;
-            questionService.createQuestion(questionText, possibleAnswers, correctAnswer, courseID);
+            questionService.createQuestion(questionText, possibleAnswers, correctAnswer, courseID, tagStrings, chartType);
             resetForm();
         } catch (QuestionException ex) {
             errorMessage = ex.getMessage();
@@ -237,5 +262,7 @@ public class QuestionManagedBean implements Serializable {
         correctAnswersSelectItems.add(new SelectItem('B', "B"));
 
         questionText = null;
+        chartType = null;
+        tagString = null;
     }
 }

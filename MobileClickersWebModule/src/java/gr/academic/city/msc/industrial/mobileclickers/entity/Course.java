@@ -26,25 +26,27 @@ public class Course implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToMany(mappedBy = "coursesTaught", cascade=CascadeType.ALL)
-    @JoinColumn(nullable=false)
+    @ManyToMany(mappedBy = "coursesTaught", cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
     private List<Lecturer> lecturers;
     private String name;
     private String code;
-    @JoinColumn(nullable=false)
+    @JoinColumn(nullable = false)
     @OneToMany(mappedBy = "course")
     private List<Question> questions;
+    /*
     @ManyToMany(mappedBy = "courses", cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private List<Semester> semesters;
 
     public List<Semester> getSemesters() {
-        return semesters;
+    return semesters;
     }
 
     public void setSemesters(List<Semester> semesters) {
-        this.semesters = semesters;
+    this.semesters = semesters;
     }
+     */
 
     public String getCode() {
         return code;
