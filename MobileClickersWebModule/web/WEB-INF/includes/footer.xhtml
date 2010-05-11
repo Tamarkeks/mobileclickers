@@ -5,18 +5,22 @@ and open the template in the editor.
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
     <ui:composition>
         <div class="foot_l"><a href="http://www.free-css.com/">&nbsp;</a></div>
         <div class="foot_content">
-            <ul>
-                <li><a href="http://www.free-css.com/">Home</a></li>
-                <li><a href="http://www.free-css.com/">About Us</a></li>
-                <li><a href="http://www.free-css.com/">Parents</a></li>
-                <li><a href="http://www.free-css.com/">Teachers</a></li>
-                <li><a href="http://www.free-css.com/">Contact Us</a></li>
-            </ul>
-            <p>All contents copyright &copy; YourName. All rights reserved.</p>
+            <h:form>
+                <ul>
+                    <li class="left">&nbsp;</li>
+                    <li><h:commandLink value="Home" action="index"/></li>
+                    <li><h:commandLink value="Teachers Space" action="profile" rendered="#{lecturerManagedBean.loggedIn}"/></li>
+                    <li><h:commandLink value="Contact Us" action="contact"/></li>
+                    <li class="sep">&nbsp;</li>
+                    <li class="right">&nbsp;</li>
+                </ul>
+            </h:form>
+            <p>All contents copyright &copy; Ivo Neskovic. All rights reserved.</p>
         </div>
         <div class="foot_r">&nbsp;</div>
         <div class="backToTop"> <a class="backToTop" href="http://www.free-css.com/">&nbsp;</a> </div>

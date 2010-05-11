@@ -5,7 +5,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
-        <title>Mobile Clickers - Issue Question</title>
+        <title>Mobile Clickers - Create New Course</title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="css/style.css" type="text/css" />
         <script type="text/javascript" src="js/mootools-release-1.11.js"></script>
@@ -25,34 +25,20 @@
                     <ui:include src="WEB-INF/includes/header.xhtml"/>
                 </div>
                 <div id="content">
-                    <h1>Create Question Form</h1>
+                    <h1>Create Course Form</h1>
                     <h:form>
-                        <h:panelGrid columns="3">
-                            <label>Course:</label>
-                            <h:selectOneMenu value="#{issueQuestionManagedBean.courseID}">
-                                <f:selectItems value="#{issueQuestionManagedBean.coursesTaught}"
-                                               var="course"
-                                               itemLabel="#{course.name} (#{course.code})"
-                                               itemValue="#{course.id}"/>
-                            </h:selectOneMenu>
-
-                            <h:commandButton value="Get Questions" action="#{issueQuestionManagedBean.getQuestionsActionHandler}"/>
-
-                            <h:outputText value="Question:" rendered="#{issueQuestionManagedBean.courseID != 0}"/>
-                            <h:selectOneMenu value="#{issueQuestionManagedBean.questionID}" rendered="#{issueQuestionManagedBean.courseID != 0}">
-                                <f:selectItems value="#{issueQuestionManagedBean.questionsForCourse}"
-                                               var="question"
-                                               itemLabel="#{question.question}"
-                                               itemValue="#{question.id}"/>
-                            </h:selectOneMenu>
+                        <h:panelGrid columns="2">
+                            <label>Course Name:</label>
+                            <h:inputText value="#{courseManagedBean.name}"/>
+                            <label>Course Code:</label>
+                            <h:inputText value="#{courseManagedBean.code}"/>
                         </h:panelGrid>
 
-
-                        <h:commandButton value="Issue" action="#{issueQuestionManagedBean.issueQuestionActionHandler}" />
+                        <h:commandButton value="Create" action="#{courseManagedBean.createCourseActionHandler}" />
 
                         <br /><br/>
                         <h:messages styleClass="error" />
-                        <h:outputText value="#{issueQuestionManagedBean.errorMessage}" styleClass="error" rendered="#{questionManagedBean.errorMessage != null}"/>
+                        <h:outputText value="#{courseManagedBean.errorMessage}" styleClass="error" rendered="#{questionManagedBean.errorMessage != null}"/>
                     </h:form>
                 </div>
                 <div id="sidebar">
