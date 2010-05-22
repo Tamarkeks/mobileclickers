@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition>
+        <ul>
+            <h:form rendered="#{lecturerManagedBean.loggedIn}">
+                <li>
+                    <h3>
+                        <h:commandLink value="Browse Questions" action="questions">
+                            <f:setPropertyActionListener target="#{questionBrowserManagedBean.courseID}" value="0"/>
+                        </h:commandLink>
+                    </h3>
+                </li>
+                <li>
+                    <h3>
+                        <h:commandLink value="Create a New Question" action="createquestion"/>
+                    </h3>
+                </li>
+                <li>
+                    <h3>
+                        <h:commandLink value="Create a New Course" action="createcourse"/>
+                    </h3>
+                </li>
+                <li>
+                    <h3>
+                        <h:commandLink value="Enroll on a Course" action="enrollment"/>
+                    </h3>
+                </li>
+            </h:form>
+            <h:form rendered="#{!lecturerManagedBean.loggedIn}">
+                <li><h3><h:commandLink value="Log In" action="login"/></h3></li>
+                <li><h3><h:commandLink value="Register" action="register"/></h3></li>
+            </h:form>
+        </ul>
+    </ui:composition>
+</html>

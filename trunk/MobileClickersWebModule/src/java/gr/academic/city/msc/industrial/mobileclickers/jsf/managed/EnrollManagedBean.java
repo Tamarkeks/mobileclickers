@@ -5,6 +5,7 @@
 
 package gr.academic.city.msc.industrial.mobileclickers.jsf.managed;
 
+import gr.academic.city.msc.industrial.mobileclickers.ejb.exception.CourseException;
 import gr.academic.city.msc.industrial.mobileclickers.ejb.session.CourseService;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Course;
 import java.io.Serializable;
@@ -25,8 +26,17 @@ public class EnrollManagedBean implements Serializable{
     private CourseService courseService;
     private List<Course> courses;
     private long courseID;
+    private String errorMessage;
     /** Creates a new instance of EnrollManagedBean */
     public EnrollManagedBean() {
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     public long getCourseID() {
@@ -47,10 +57,17 @@ public class EnrollManagedBean implements Serializable{
     }
 
     public String enrollActionHandler() {
+        errorMessage = null;
+
         FacesContext context = FacesContext.getCurrentInstance();
         LecturerManagedBean lmb = context.getApplication().evaluateExpressionGet(context, "#{lecturerManagedBean}", LecturerManagedBean.class);
 
-        courseService.enrollOnCourse(lmb.getLecturerID(), courseID);
+        try {
+            courseService.enrollOnCourse(lmb.getLecturerID(), courseID);
+        } catch (CourseException ex) {
+            errorMessage = ex.getMessage();
+            return null;
+        }
 
         return "success";
     }

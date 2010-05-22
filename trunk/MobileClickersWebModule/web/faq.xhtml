@@ -4,7 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
-        <title>Mobile Clickers - Create New Course</title>
+        <title>Mobile Clickers - FAQ</title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="css/style.css" type="text/css" />
     </h:head>
@@ -21,21 +21,7 @@
                     <ui:include src="WEB-INF/includes/header.xhtml"/>
                 </div>
                 <div id="content">
-                    <h1>Create Course Form</h1>
-                    <h:form>
-                        <h:panelGrid columns="2">
-                            <label>Course Name:</label>
-                            <h:inputText value="#{courseManagedBean.name}"/>
-                            <label>Course Code:</label>
-                            <h:inputText value="#{courseManagedBean.code}"/>
-                        </h:panelGrid>
-
-                        <h:commandButton value="Create" action="#{courseManagedBean.createCourseActionHandler}" />
-
-                        <br /><br/>
-                        <h:messages styleClass="error" />
-                        <h:outputText value="#{courseManagedBean.errorMessage}" styleClass="error" rendered="#{courseManagedBean.errorMessage != null}"/>
-                    </h:form>
+                    <h1>Frequently Asked Questions</h1>
                 </div>
                 <div id="sidebar">
                     <h2>Quick Links</h2>
