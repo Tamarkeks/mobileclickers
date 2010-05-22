@@ -8,14 +8,17 @@ package gr.academic.city.msc.industrial.mobileclickers.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -45,6 +48,17 @@ public class AnsweredQuestion implements Serializable {
     private Lecturer issuer;
     @Enumerated(EnumType.STRING)
     private Status status;
+    @Lob()
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] resultsChart;
+
+    public byte[] getResultsChart() {
+        return resultsChart;
+    }
+
+    public void setResultsChart(byte[] resultsChart) {
+        this.resultsChart = resultsChart;
+    }
 
     public Status getStatus() {
         return status;

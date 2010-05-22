@@ -4,6 +4,7 @@
  */
 package gr.academic.city.msc.industrial.mobileclickers.jsf.managed;
 
+import gr.academic.city.msc.industrial.mobileclickers.ejb.exception.CourseException;
 import gr.academic.city.msc.industrial.mobileclickers.ejb.exception.QuestionException;
 import gr.academic.city.msc.industrial.mobileclickers.ejb.session.CourseService;
 import gr.academic.city.msc.industrial.mobileclickers.ejb.session.QuestionService;
@@ -45,7 +46,12 @@ public class QuestionBrowserManagedBean implements Serializable {
     public List<Course> getCoursesTaught() {
         FacesContext context = FacesContext.getCurrentInstance();
         LecturerManagedBean lmb = context.getApplication().evaluateExpressionGet(context, "#{lecturerManagedBean}", LecturerManagedBean.class);
-        coursesTaught = courseService.getCoursesForLecturer(lmb.getLecturerID());
+        try {
+            coursesTaught = courseService.getCoursesWithQuestionsForLecturer(lmb.getLecturerID());
+        } catch (CourseException ex) {
+            errorMessage = ex.getMessage();
+            return null;
+        }
         return coursesTaught;
     }
 
@@ -78,13 +84,30 @@ public class QuestionBrowserManagedBean implements Serializable {
     }
 
     public String getQuestionsActionHandler() {
-        questionsForCourse = questionService.getQuestionsForCourse(courseID);
-        tagsForCourse = courseService.getTagsForCourse(courseID);
+        errorMessage = null;
+        try {
+            questionsForCourse = questionService.getQuestionsForCourse(courseID);
+        } catch (QuestionException ex) {
+            errorMessage = ex.getMessage();
+            return null;
+        }
+        try {
+            tagsForCourse = courseService.getTagsForCourse(courseID);
+        } catch (CourseException ex) {
+            errorMessage = ex.getMessage();
+            return null;
+        }
         return null;
     }
 
     public String tagFilterActionHandler() {
-        questionsForCourse = questionService.filterQuestions(courseID, tagID);
+        errorMessage = null;
+        try {
+            questionsForCourse = questionService.filterQuestions(courseID, tagID);
+        } catch (QuestionException ex) {
+            errorMessage = ex.getMessage();
+            return null;
+        }
         return null;
     }
 
@@ -118,7 +141,7 @@ public class QuestionBrowserManagedBean implements Serializable {
 
             FacesContext context = FacesContext.getCurrentInstance();
             LecturerManagedBean lmb = context.getApplication().evaluateExpressionGet(context, "#{lecturerManagedBean}", LecturerManagedBean.class);
-            String code = questionService.issueQuestion(lmb.getLecturerID(), questionID);
+            String code = questionService.issueQuestion(lmb.getLecturerID(), questionID, courseID);
             return code;
         } catch (QuestionException ex) {
             errorMessage = ex.getMessage();

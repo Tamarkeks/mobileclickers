@@ -11,9 +11,11 @@ import gr.academic.city.msc.industrial.mobileclickers.entity.ChartType;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Course;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Lecturer;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Question;
+import gr.academic.city.msc.industrial.mobileclickers.entity.QuestionCodeGenerator;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Status;
 import gr.academic.city.msc.industrial.mobileclickers.entity.SubmitedAnswer;
 import gr.academic.city.msc.industrial.mobileclickers.entity.Tag;
+import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,8 +38,15 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.ui.RectangleInsets;
 
 /**
  *
@@ -111,14 +120,16 @@ public class QuestionService {
         em.merge(course);
     }
 
-    public String issueQuestion(long lecturerID, long questionID) throws QuestionException {
+    public String issueQuestion(long lecturerID, long questionID, long courseID) throws QuestionException {
         if (lecturerID < 0
-                || questionID < 0) {
+                || questionID < 0
+                || courseID < 0) {
             throw new QuestionException("Provide all details! (lecturer, question)");
         }
 
         Lecturer lecturer = em.find(Lecturer.class, lecturerID);
         Question question = em.find(Question.class, questionID);
+        Course course = em.find(Course.class, courseID);
 
         AnsweredQuestion answeredQuestion = new AnsweredQuestion();
         answeredQuestion.setIssueDate(new Date());
@@ -126,24 +137,34 @@ public class QuestionService {
         answeredQuestion.setQuestion(question);
         answeredQuestion.setStatus(Status.ACTIVE);
 
-        em.persist(answeredQuestion);
+        answeredQuestion.setQuestionCode(generateQuestionCode(lecturer, course));
 
-        answeredQuestion.setQuestionCode(answeredQuestion.getId().toString());
         em.persist(answeredQuestion);
 
         question.getAnsweredQuestions().add(answeredQuestion);
         em.merge(question);
 
-        return answeredQuestion.getId().toString();
+        return answeredQuestion.getQuestionCode();
     }
 
-    public List<Question> getQuestionsForCourse(long courseID) {
-        return em.find(Course.class, courseID).getQuestions();
+    public List<Question> getQuestionsForCourse(long courseID) throws QuestionException {
+        List<Question> questions = em.find(Course.class, courseID).getQuestions();
+
+        if (questions.size() == 0) {
+            throw new QuestionException("Course does not have any questions!");
+        }
+
+        return questions;
     }
 
-    public List<Question> filterQuestions(long courseID, long tagID) {
+    public List<Question> filterQuestions(long courseID, long tagID) throws QuestionException {
         Course course = em.find(Course.class, courseID);
         Tag tag = em.find(Tag.class, tagID);
+
+        if (course == null
+                || tag == null) {
+            throw new QuestionException("Course/Tag does not exist!");
+        }
 
         List<Question> questions = new ArrayList<Question>();
 
@@ -155,16 +176,45 @@ public class QuestionService {
         return questions;
     }
 
-    private String generateQuestionCode(long lecturerID, long questionID) {
-        int code = (int) ((lecturerID + questionID + System.currentTimeMillis()) / 1000);
-        return Integer.toString(code);
+    private String generateQuestionCode(Lecturer lecturer, Course course) {
+        Query query = em.createQuery("SELECT q FROM QuestionCodeGenerator q WHERE q.lecturer = :lecturer AND q.course = :course", QuestionCodeGenerator.class);
+        query.setParameter("lecturer", lecturer).setParameter("course", course);
+
+        QuestionCodeGenerator questionCodeGenerator;
+        if (query.getResultList().size() == 0) {
+            //first time
+            questionCodeGenerator = new QuestionCodeGenerator();
+            questionCodeGenerator.setLecturer(lecturer);
+            questionCodeGenerator.setCourse(course);
+            questionCodeGenerator.setCounter(1);
+            em.persist(questionCodeGenerator);
+        } else {
+            questionCodeGenerator = (QuestionCodeGenerator) query.getResultList().get(0);
+            questionCodeGenerator.setCounter(questionCodeGenerator.getCounter() + 1);
+            em.merge(questionCodeGenerator);
+        }
+        return "" + lecturer.getFirstName().charAt(0) + lecturer.getLastName().charAt(0) + course.getCode() + questionCodeGenerator.getCounter();
     }
 
-    public void answerQuestion(String questionCode, String answerChar, String uniqueAnswerCode) {
+    public void answerQuestion(String questionCode, String answerChar, String uniqueAnswerCode) throws QuestionException {
+        if (questionCode == null
+                || questionCode.equals("")
+                || answerChar == null
+                || answerChar.equals("")
+                || uniqueAnswerCode == null
+                || uniqueAnswerCode.equals("")) {
+            throw new QuestionException("Please provide all details!");
+        }
+
+
         Query query = em.createQuery("SELECT a FROM AnsweredQuestion a WHERE a.questionCode = :questionCode", AnsweredQuestion.class);
         query.setParameter("questionCode", questionCode);
 
         AnsweredQuestion answeredQuestion = (AnsweredQuestion) query.getResultList().get(0);
+
+        if (!isSubmitedAnswerUnique(answeredQuestion, uniqueAnswerCode)) {
+            throw new QuestionException("You have already answered this question!");
+        }
 
         Question question = answeredQuestion.getQuestion();
         List<Answer> possibleAnswers = question.getPossibleAnswers();
@@ -174,8 +224,6 @@ public class QuestionService {
                 answer = possibleAnswers.get(i);
             }
         }
-
-        //TODO: handle multiple answers!
 
         SubmitedAnswer submitedAnswer = new SubmitedAnswer();
         submitedAnswer.setAnswer(answer);
@@ -188,9 +236,13 @@ public class QuestionService {
         em.merge(answeredQuestion);
     }
 
-    public int getNumberOfAnswers(String questionCode) {
+    public int getNumberOfAnswers(String questionCode) throws QuestionException {
         Query query = em.createQuery("SELECT a FROM AnsweredQuestion a WHERE a.questionCode = :questionCode", AnsweredQuestion.class);
         query.setParameter("questionCode", questionCode);
+
+        if (query.getResultList().size() == 0) {
+            throw new QuestionException("Question with specified code does not exist!");
+        }
 
         AnsweredQuestion answeredQuestion = (AnsweredQuestion) query.getResultList().get(0);
         Question question = answeredQuestion.getQuestion();
@@ -198,7 +250,7 @@ public class QuestionService {
         return question.getPossibleAnswers().size();
     }
 
-    public void generateImageStatisticsForQuestion(long issuedQuestionID) throws IOException {
+    public void generateStatisticsForIssuedQuestion(long issuedQuestionID) throws IOException {
         AnsweredQuestion answeredQuestion = em.find(AnsweredQuestion.class, issuedQuestionID);
 
         if (answeredQuestion.getStatus() == Status.ACTIVE) {
@@ -218,7 +270,7 @@ public class QuestionService {
 
             it = keySet.iterator();
             DefaultPieDataset pieDataset = new DefaultPieDataset();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 Character next = (Character) it.next();
                 pieDataset.setValue(next, (countedAnswers.get(next) / totalAnswers) * 100.0);
             }
@@ -245,12 +297,117 @@ public class QuestionService {
             byte[] imageData = ChartUtilities.encodeAsPNG(chart.createBufferedImage(500, 270));
 
             String fileSeparator = System.getProperty("file.separator");
-            //FileOutputStream fos = new FileOutputStream(new File("images" + fileSeparator + "charts" + fileSeparator + answeredQuestion.getQuestionCode()));
-            FileOutputStream fos = new FileOutputStream(new File("docroot" + fileSeparator + answeredQuestion.getQuestionCode() + ".png"));
+            new File("docroot" + fileSeparator + "charts" + fileSeparator).mkdirs();
+            FileOutputStream fos = new FileOutputStream(new File("docroot" + fileSeparator + "charts" + fileSeparator + answeredQuestion.getQuestionCode() + ".png"));
             fos.write(imageData);
             fos.flush();
             fos.close();
         }
+    }
+
+    public byte[] getStatisticsForIssuedQuestion(String questionCode) throws IOException {
+        Query query = em.createQuery("SELECT a FROM AnsweredQuestion a WHERE a.questionCode = :questionCode", AnsweredQuestion.class);
+        query.setParameter("questionCode", questionCode);
+
+        AnsweredQuestion answeredQuestion = (AnsweredQuestion) query.getResultList().get(0);
+
+        if (answeredQuestion.getStatus() == Status.ACTIVE) {
+            List<SubmitedAnswer> submitedAnswers = answeredQuestion.getSubmitedAnswers();
+
+            Map<Character, Integer> countedAnswers = countAnswers(submitedAnswers);
+            float totalAnswers = submitedAnswers.size();
+
+            Set<Character> keySet = countedAnswers.keySet();
+            Iterator it = keySet.iterator();
+
+            DefaultCategoryDataset categoryDataset = new DefaultCategoryDataset();
+            while (it.hasNext()) {
+                Character next = (Character) it.next();
+                categoryDataset.addValue((countedAnswers.get(next) / totalAnswers) * 100.0, next, "");
+            }
+
+            it = keySet.iterator();
+            DefaultPieDataset pieDataset = new DefaultPieDataset();
+            while (it.hasNext()) {
+                Character next = (Character) it.next();
+                pieDataset.setValue(next, (countedAnswers.get(next) / totalAnswers) * 100.0);
+            }
+
+            JFreeChart chart = null;
+            switch (answeredQuestion.getQuestion().getChart()) {
+                case BAR:
+                    chart = ChartFactory.createBarChart("Submited Answers", "Options", "Answers (%)", categoryDataset, PlotOrientation.VERTICAL, true, true, false);
+                    break;
+                case BAR3D:
+                    chart = ChartFactory.createBarChart3D("Submited Answers", "Options", "Answers (%)", categoryDataset, PlotOrientation.VERTICAL, true, true, false);
+                    break;
+                case PIE:
+                    chart = ChartFactory.createPieChart("Submited Answers", pieDataset, true, true, false);
+                    break;
+                case PIE3D:
+                    chart = ChartFactory.createPieChart3D("Submited Answers", pieDataset, true, true, false);
+                    break;
+                case LINE:
+                    chart = ChartFactory.createLineChart("Submited Answers", "Options", "Answers (%)", categoryDataset, PlotOrientation.VERTICAL, true, true, false);
+                    break;
+            }
+
+            byte[] imageData = ChartUtilities.encodeAsPNG(chart.createBufferedImage(500, 270));
+            return imageData;
+        } else {
+            return answeredQuestion.getResultsChart();
+        }
+    }
+
+    public byte[] generateStatisticsForQuestion(long questionID) throws IOException {
+        Question question = em.find(Question.class, questionID);
+        List<AnsweredQuestion> answeredQuestions = question.getAnsweredQuestions();
+
+        TimeSeries ts = new TimeSeries("Correct Answers", Day.class);
+
+        for (AnsweredQuestion answeredQuestion : answeredQuestions) {
+            List<SubmitedAnswer> submitedAnswers = answeredQuestion.getSubmitedAnswers();
+            List<SubmitedAnswer> correctAnswers = new ArrayList<SubmitedAnswer>();
+
+            for (SubmitedAnswer submitedAnswer : submitedAnswers) {
+                if (submitedAnswer.getAnswer().equals(question.getCorrectAnswer())) {
+                    correctAnswers.add(submitedAnswer);
+                }
+            }
+            double value;
+            double correct = correctAnswers.size();
+            double submited = submitedAnswers.size();
+            if (submitedAnswers.size() == 0) {
+                value = 0;
+            } else {
+                value = (correct / submited) * 100.0;
+            }
+            ts.addOrUpdate(new Day(answeredQuestion.getIssueDate()), value);
+        }
+        TimeSeriesCollection tsc = new TimeSeriesCollection(ts);
+        JFreeChart chart = ChartFactory.createTimeSeriesChart("Success Rate", "Date", "No. Correct Answers (%)", tsc, true, true, false);
+
+        XYPlot plot = (XYPlot) chart.getPlot();
+        plot.setBackgroundPaint(Color.lightGray);
+        plot.setDomainGridlinePaint(Color.white);
+        plot.setRangeGridlinePaint(Color.white);
+        plot.setAxisOffset(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
+        plot.setDomainCrosshairVisible(true);
+        plot.setRangeCrosshairVisible(true);
+
+        XYItemRenderer r = plot.getRenderer();
+        if (r instanceof XYLineAndShapeRenderer) {
+            XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
+            renderer.setBaseShapesVisible(true);
+            renderer.setBaseShapesFilled(true);
+        }
+
+        //DateAxis axis = (DateAxis) plot.getDomainAxis();
+        //axis.setDateFormatOverride(new SimpleDateFormat("MMM-yyyy"));
+
+        byte[] imageData = ChartUtilities.encodeAsPNG(chart.createBufferedImage(500, 270));
+
+        return imageData;
     }
 
     private Map<Character, Integer> countAnswers(List<SubmitedAnswer> submitedAnswers) {
@@ -284,14 +441,31 @@ public class QuestionService {
         return em.find(Question.class, questionID);
     }
 
-    public void stopQuestion(long issuedQuestionID) {
+    public void stopQuestion(long issuedQuestionID) throws QuestionException {
         try {
             AnsweredQuestion answeredQuestion = em.find(AnsweredQuestion.class, issuedQuestionID);
-            generateImageStatisticsForQuestion(answeredQuestion.getId());
+
+            if (answeredQuestion == null
+                    || answeredQuestion.getStatus() == Status.INACTIVE) {
+                throw new QuestionException("Question already stoped!");
+            }
+
+            answeredQuestion.setResultsChart(getStatisticsForIssuedQuestion(answeredQuestion.getQuestionCode()));
             answeredQuestion.setStatus(Status.INACTIVE);
             em.merge(answeredQuestion);
         } catch (IOException ex) {
             Logger.getLogger(QuestionService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private boolean isSubmitedAnswerUnique(AnsweredQuestion answeredQuestion, String uniqueAnswerCode) {
+        List<SubmitedAnswer> submitedAnswers = answeredQuestion.getSubmitedAnswers();
+
+        for (SubmitedAnswer submitedAnswer : submitedAnswers) {
+            if (submitedAnswer.getUniqueSubmissionCode().equals(uniqueAnswerCode)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

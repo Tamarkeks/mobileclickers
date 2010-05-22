@@ -5,6 +5,7 @@
 
 package gr.academic.city.msc.industrial.mobileclickers.ejb.webservices;
 
+import gr.academic.city.msc.industrial.mobileclickers.ejb.exception.QuestionException;
 import gr.academic.city.msc.industrial.mobileclickers.ejb.session.QuestionService;
 import javax.ejb.EJB;
 import javax.jws.WebMethod;
@@ -23,11 +24,16 @@ public class MobileClickersWS {
      * Web service operation
      */
     @WebMethod(operationName = "submitAnswer")
-    public void submitAnswer(@WebParam(name = "questionCode")
+    public int submitAnswer(@WebParam(name = "questionCode")
     String questionCode, @WebParam(name = "answer")
     String answer, @WebParam(name = "uniqueSubmissionCode")
     String uniqueSubmissionCode) {
-        questionService.answerQuestion(questionCode, answer, uniqueSubmissionCode);
+        try {
+            questionService.answerQuestion(questionCode, answer, uniqueSubmissionCode);
+            return 1;
+        } catch (QuestionException ex) {
+            return -1;
+        }
     }
 
     /**
@@ -36,7 +42,11 @@ public class MobileClickersWS {
     @WebMethod(operationName = "getNumberOfAnswer")
     public int getNumberOfAnswer(@WebParam(name = "questionCode")
     String questionCode) {
-        return questionService.getNumberOfAnswers(questionCode);
+        try {
+            return questionService.getNumberOfAnswers(questionCode);
+        } catch (QuestionException ex) {
+            return -1;
+        }
     }
 
 }

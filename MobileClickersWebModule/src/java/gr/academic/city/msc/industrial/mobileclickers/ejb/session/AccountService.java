@@ -79,9 +79,12 @@ public class AccountService {
         }
     }
 
-    public String getAccountAlias(long lecturerID) {
+    public String getAccountAlias(long lecturerID) throws AccountException {
         Lecturer lecturer = em.find(Lecturer.class, lecturerID);
 
+        if (lecturer == null) {
+            throw new AccountException("Account non-existant");
+        }
         return lecturer.getFirstName();
     }
 }

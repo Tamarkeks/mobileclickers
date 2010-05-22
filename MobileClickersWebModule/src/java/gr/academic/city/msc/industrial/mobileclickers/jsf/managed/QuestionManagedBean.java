@@ -205,7 +205,7 @@ public class QuestionManagedBean implements Serializable {
         while (tokenizer.hasMoreTokens()) {
             tagStrings.add(tokenizer.nextToken());
         }
-        
+
         try {
             errorMessage = null;
             questionService.createQuestion(questionText, possibleAnswers, correctAnswer, courseID, tagStrings, chartType);
@@ -264,5 +264,7 @@ public class QuestionManagedBean implements Serializable {
         questionText = null;
         chartType = null;
         tagString = null;
+        shownAnswers = 2;
+        correctAnswer = 'A';
     }
 }

@@ -5,6 +5,7 @@
 
 package gr.academic.city.msc.industrial.mobileclickers.jsf.managed;
 
+import gr.academic.city.msc.industrial.mobileclickers.ejb.exception.CourseException;
 import gr.academic.city.msc.industrial.mobileclickers.ejb.session.CourseService;
 import java.io.Serializable;
 import javax.ejb.EJB;
@@ -56,7 +57,18 @@ public class CourseManagedBean implements Serializable{
         errorMessage = null;
         FacesContext context = FacesContext.getCurrentInstance();
         LecturerManagedBean lmb = context.getApplication().evaluateExpressionGet(context, "#{lecturerManagedBean}", LecturerManagedBean.class);
-        courseService.createCourse(lmb.getLecturerID(), name, code);
+        try {
+            courseService.createCourse(lmb.getLecturerID(), name, code);
+            resetForm();
+        } catch (CourseException ex) {
+            errorMessage = ex.getMessage();
+            return null;
+        }
         return "success";
+    }
+
+    private void resetForm() {
+        name = null;
+        code = null;
     }
 }
