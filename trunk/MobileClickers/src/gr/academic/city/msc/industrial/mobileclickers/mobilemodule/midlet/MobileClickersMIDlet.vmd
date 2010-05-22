@@ -43,7 +43,7 @@
                     <Component componentID="18" typeID="Cjavax.microedition.lcdui.TextField">
                         <Property name="instanceName" typeID="Pjava.lang.String" value="VquestionCodeTextField"/>
                         <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
-                        <Property name="label" typeID="Pjava.lang.String" value="VInput question code:"/>
+                        <Property name="label" typeID="Pjava.lang.String" value="VQuestion code:"/>
                         <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R8"/>
                         <Property name="maxSize" typeID="Pint" value="V32"/>
                         <Property name="constraints" typeID="Pint" value="V0"/>
@@ -68,8 +68,14 @@
                     <Property name="text" typeID="Pjava.lang.String" value="VPlease wait..."/>
                     <Property name="task" typeID="Corg.netbeans.microedition.util.CancellableTask" value="R28"/>
                     <Component componentID="27" typeID="C#WaitScreenFailureCommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R56"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R23"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R25"/>
+                        <Component componentID="56" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R27"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
+                            <Property name="alert" typeID="Cjavax.microedition.lcdui.Alert" value="R55"/>
+                        </Component>
                     </Component>
                     <Component componentID="26" typeID="C#WaitScreenSuccessCommandEventSource">
                         <Property name="eventHandler" typeID="C#EventHandler" value="R30"/>
@@ -82,7 +88,7 @@
                     </Component>
                 </Component>
                 <Component componentID="34" typeID="Corg.netbeans.microedition.lcdui.WaitScreen">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VwaitScreen"/>
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VsubmitAnswerWaitScreen"/>
                     <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
                     <Property name="commands" typeID="1C#CommandEventSource" value="A2:3_R353_R36"/>
                     <Property name="title" typeID="Pjava.lang.String" value="VSubmitting answer..."/>
@@ -91,12 +97,24 @@
                     <Property name="text" typeID="Pjava.lang.String" value="VPlease wait..."/>
                     <Property name="task" typeID="Corg.netbeans.microedition.util.CancellableTask" value="R37"/>
                     <Component componentID="35" typeID="C#WaitScreenSuccessCommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R60"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R34"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R24"/>
+                        <Component componentID="60" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R35"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
+                            <Property name="alert" typeID="Cjavax.microedition.lcdui.Alert" value="R57"/>
+                        </Component>
                     </Component>
                     <Component componentID="36" typeID="C#WaitScreenFailureCommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R59"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R34"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R25"/>
+                        <Component componentID="59" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R36"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
+                            <Property name="alert" typeID="Cjavax.microedition.lcdui.Alert" value="R58"/>
+                        </Component>
                     </Component>
                 </Component>
                 <Component componentID="45" typeID="Cjavax.microedition.lcdui.List">
@@ -134,6 +152,33 @@
                         </Component>
                     </Component>
                 </Component>
+                <Component componentID="55" typeID="Cjavax.microedition.lcdui.Alert">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VgetQuestionErrorAlert"/>
+                    <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
+                    <Property name="title" typeID="Pjava.lang.String" value="VError Fetching Question"/>
+                    <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
+                    <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R61"/>
+                    <Property name="string" typeID="Pjava.lang.String" value="VQuestion with specified code does not exist! Please try again!"/>
+                    <Property name="timeout" typeID="Pint" value="V-2"/>
+                </Component>
+                <Component componentID="58" typeID="Cjavax.microedition.lcdui.Alert">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VsubmitAnswerErrorAlert"/>
+                    <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
+                    <Property name="title" typeID="Pjava.lang.String" value="VError Submiting Answer"/>
+                    <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
+                    <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R61"/>
+                    <Property name="string" typeID="Pjava.lang.String" value="VYou have already answered this question!"/>
+                    <Property name="timeout" typeID="Pint" value="V-2"/>
+                </Component>
+                <Component componentID="57" typeID="Cjavax.microedition.lcdui.Alert">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VsubmitAnswerSuccessAlert"/>
+                    <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
+                    <Property name="title" typeID="Pjava.lang.String" value="VSuccess!"/>
+                    <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
+                    <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R62"/>
+                    <Property name="string" typeID="Pjava.lang.String" value="VAnswer submited successfuly!"/>
+                    <Property name="timeout" typeID="Pint" value="V-2"/>
+                </Component>
             </Component>
             <Component componentID="11" typeID="C#CommandsCategory">
                 <Component componentID="16" typeID="Cjavax.microedition.lcdui.Command">
@@ -145,7 +190,7 @@
                 <Component componentID="20" typeID="Cjavax.microedition.lcdui.Command">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VgetQuestionCommand"/>
                     <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
-                    <Property name="label" typeID="Pjava.lang.String" value="VGet Possible Answers"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VGet Question"/>
                     <Property name="type" typeID="Pint" value="V1"/>
                 </Component>
                 <Component componentID="25" typeID="C#WaitScreenFailureCommand">
@@ -187,15 +232,19 @@
                     <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
                     <Property name="resourcePath" typeID="Pjava.lang.String" value="V/gr/academic/city/msc/industrial/mobileclickers/mobilemodule/images/clock.png"/>
                 </Component>
+                <Component componentID="62" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vsuccess"/>
+                    <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/gr/academic/city/msc/industrial/mobileclickers/mobilemodule/images/success.png"/>
+                </Component>
+                <Component componentID="61" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Verror"/>
+                    <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/gr/academic/city/msc/industrial/mobileclickers/mobilemodule/images/error_alert.png"/>
+                </Component>
             </Component>
             <Component componentID="13" typeID="C#DatabindingCategory"/>
         </Component>
     </Document>
-    <FlowScene version="1">
-        <Node componentID="2" descriptorID="componentNode2" x="50" y="50"/>
-        <Node componentID="45" descriptorID="componentNode45" x="150" y="199"/>
-        <Node componentID="23" descriptorID="componentNode23" x="439" y="218"/>
-        <Node componentID="14" descriptorID="componentNode14" x="381" y="82"/>
-        <Node componentID="34" descriptorID="componentNode34" x="-26" y="179"/>
-    </FlowScene>
+    <FlowScene version="1"/>
 </VisualDesign>
