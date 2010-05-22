@@ -79,7 +79,7 @@ public class MobileClickersWSService_Stub implements MobileClickersWSService, ja
         return ((Integer )((Object[])resultObj)[0]).intValue();
     }
 
-    public void submitAnswer(String questionCode, String answer, String uniqueSubmissionCode) throws java.rmi.RemoteException {
+    public int submitAnswer(String questionCode, String answer, String uniqueSubmissionCode) throws java.rmi.RemoteException {
         Object inputObject[] = new Object[] {
             questionCode,
             answer,
@@ -100,6 +100,7 @@ public class MobileClickersWSService_Stub implements MobileClickersWSService, ja
             throw e;
         }
 
+        return ((Integer )((Object[])resultObj)[0]).intValue();
     }
 
     protected static final QName _qname_operation_getNumberOfAnswer = new QName( "http://webservices.ejb.mobileclickers.industrial.msc.city.academic.gr/", "getNumberOfAnswer" );
@@ -108,14 +109,14 @@ public class MobileClickersWSService_Stub implements MobileClickersWSService, ja
     protected static final QName _qname_submitAnswerResponse = new QName( "http://webservices.ejb.mobileclickers.industrial.msc.city.academic.gr/", "submitAnswerResponse" );
     protected static final QName _qname_getNumberOfAnswer = new QName( "http://webservices.ejb.mobileclickers.industrial.msc.city.academic.gr/", "getNumberOfAnswer" );
     protected static final QName _qname_submitAnswer = new QName( "http://webservices.ejb.mobileclickers.industrial.msc.city.academic.gr/", "submitAnswer" );
+    protected static final Element _type_submitAnswer;
     protected static final Element _type_submitAnswerResponse;
     protected static final Element _type_getNumberOfAnswer;
-    protected static final Element _type_submitAnswer;
     protected static final Element _type_getNumberOfAnswerResponse;
 
     static {
         _type_submitAnswerResponse = new Element( _qname_submitAnswerResponse, _complexType( new Element[] {
-        }), 1, 1, false );
+            new Element( new QName( "", "return" ), Type.INT )}), 1, 1, false );
         _type_getNumberOfAnswerResponse = new Element( _qname_getNumberOfAnswerResponse, _complexType( new Element[] {
             new Element( new QName( "", "return" ), Type.INT )}), 1, 1, false );
         _type_getNumberOfAnswer = new Element( _qname_getNumberOfAnswer, _complexType( new Element[] {

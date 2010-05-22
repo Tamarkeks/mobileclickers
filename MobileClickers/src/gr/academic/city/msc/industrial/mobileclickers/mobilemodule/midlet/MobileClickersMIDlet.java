@@ -24,14 +24,19 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
     private Form selectQuestionForm;
     private TextField questionCodeTextField;
     private WaitScreen getQuestionWaitScreen;
-    private WaitScreen waitScreen;
+    private WaitScreen submitAnswerWaitScreen;
     private List answersList;
+    private Alert getQuestionErrorAlert;
+    private Alert submitAnswerSuccessAlert;
+    private Alert submitAnswerErrorAlert;
     private Command exitCommand;
     private Command getQuestionCommand;
     private Command submitAnswerCommand;
     private SimpleCancellableTask getQuestionTask;
     private SimpleCancellableTask submitAnswerTask;
     private Image clock;
+    private Image error;
+    private Image success;
     //</editor-fold>//GEN-END:|fields|0|
 
     /**
@@ -113,13 +118,13 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
                 // write post-action user code here
             } else if (command == submitAnswerCommand) {//GEN-LINE:|7-commandAction|5|50-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getWaitScreen());//GEN-LINE:|7-commandAction|6|50-postAction
+                switchDisplayable(null, getSubmitAnswerWaitScreen());//GEN-LINE:|7-commandAction|6|50-postAction
                 // write post-action user code here
             }//GEN-BEGIN:|7-commandAction|7|27-preAction
         } else if (displayable == getQuestionWaitScreen) {
             if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|7|27-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|8|27-postAction
+                switchDisplayable(getGetQuestionErrorAlert(), getSelectQuestionForm());//GEN-LINE:|7-commandAction|8|27-postAction
                 // write post-action user code here
             } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|9|26-preAction
                 // write pre-action user code here
@@ -136,14 +141,14 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
                 switchDisplayable(null, getGetQuestionWaitScreen());//GEN-LINE:|7-commandAction|14|21-postAction
                 // write post-action user code here
             }//GEN-BEGIN:|7-commandAction|15|36-preAction
-        } else if (displayable == waitScreen) {
+        } else if (displayable == submitAnswerWaitScreen) {
             if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|15|36-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|16|36-postAction
+                switchDisplayable(getSubmitAnswerErrorAlert(), getSelectQuestionForm());//GEN-LINE:|7-commandAction|16|36-postAction
                 // write post-action user code here
             } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|17|35-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|18|35-postAction
+                switchDisplayable(getSubmitAnswerSuccessAlert(), getSelectQuestionForm());//GEN-LINE:|7-commandAction|18|35-postAction
                 // write post-action user code here
             }//GEN-BEGIN:|7-commandAction|19|7-postCommandAction
         }//GEN-END:|7-commandAction|19|7-postCommandAction
@@ -192,7 +197,7 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
     public TextField getQuestionCodeTextField() {
         if (questionCodeTextField == null) {//GEN-END:|18-getter|0|18-preInit
             // write pre-init user code here
-            questionCodeTextField = new TextField("Input question code:", null, 32, TextField.ANY);//GEN-LINE:|18-getter|1|18-postInit
+            questionCodeTextField = new TextField("Question code:", null, 32, TextField.ANY);//GEN-LINE:|18-getter|1|18-postInit
             // write post-init user code here
         }//GEN-BEGIN:|18-getter|2|
         return questionCodeTextField;
@@ -227,7 +232,7 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
     public Command getGetQuestionCommand() {
         if (getQuestionCommand == null) {//GEN-END:|20-getter|0|20-preInit
             // write pre-init user code here
-            getQuestionCommand = new Command("Get Possible Answers", Command.SCREEN, 0);//GEN-LINE:|20-getter|1|20-postInit
+            getQuestionCommand = new Command("Get Question", Command.SCREEN, 0);//GEN-LINE:|20-getter|1|20-postInit
             // write post-init user code here
         }//GEN-BEGIN:|20-getter|2|
         return getQuestionCommand;
@@ -255,23 +260,23 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
     }
     //</editor-fold>//GEN-END:|28-getter|3|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: waitScreen ">//GEN-BEGIN:|34-getter|0|34-preInit
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: submitAnswerWaitScreen ">//GEN-BEGIN:|34-getter|0|34-preInit
     /**
-     * Returns an initiliazed instance of waitScreen component.
+     * Returns an initiliazed instance of submitAnswerWaitScreen component.
      * @return the initialized component instance
      */
-    public WaitScreen getWaitScreen() {
-        if (waitScreen == null) {//GEN-END:|34-getter|0|34-preInit
+    public WaitScreen getSubmitAnswerWaitScreen() {
+        if (submitAnswerWaitScreen == null) {//GEN-END:|34-getter|0|34-preInit
             // write pre-init user code here
-            waitScreen = new WaitScreen(getDisplay());//GEN-BEGIN:|34-getter|1|34-postInit
-            waitScreen.setTitle("Submitting answer...");
-            waitScreen.setCommandListener(this);
-            waitScreen.setImage(getClock());
-            waitScreen.setText("Please wait...");
-            waitScreen.setTask(getSubmitAnswerTask());//GEN-END:|34-getter|1|34-postInit
+            submitAnswerWaitScreen = new WaitScreen(getDisplay());//GEN-BEGIN:|34-getter|1|34-postInit
+            submitAnswerWaitScreen.setTitle("Submitting answer...");
+            submitAnswerWaitScreen.setCommandListener(this);
+            submitAnswerWaitScreen.setImage(getClock());
+            submitAnswerWaitScreen.setText("Please wait...");
+            submitAnswerWaitScreen.setTask(getSubmitAnswerTask());//GEN-END:|34-getter|1|34-postInit
             // write post-init user code here
         }//GEN-BEGIN:|34-getter|2|
-        return waitScreen;
+        return submitAnswerWaitScreen;
     }
     //</editor-fold>//GEN-END:|34-getter|2|
 
@@ -359,6 +364,92 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
     }//GEN-BEGIN:|45-action|2|
     //</editor-fold>//GEN-END:|45-action|2|
 
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: getQuestionErrorAlert ">//GEN-BEGIN:|55-getter|0|55-preInit
+    /**
+     * Returns an initiliazed instance of getQuestionErrorAlert component.
+     * @return the initialized component instance
+     */
+    public Alert getGetQuestionErrorAlert() {
+        if (getQuestionErrorAlert == null) {//GEN-END:|55-getter|0|55-preInit
+            // write pre-init user code here
+            getQuestionErrorAlert = new Alert("Error Fetching Question", "Question with specified code does not exist! Please try again!", getError(), null);//GEN-BEGIN:|55-getter|1|55-postInit
+            getQuestionErrorAlert.setTimeout(Alert.FOREVER);//GEN-END:|55-getter|1|55-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|55-getter|2|
+        return getQuestionErrorAlert;
+    }
+    //</editor-fold>//GEN-END:|55-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: submitAnswerSuccessAlert ">//GEN-BEGIN:|57-getter|0|57-preInit
+    /**
+     * Returns an initiliazed instance of submitAnswerSuccessAlert component.
+     * @return the initialized component instance
+     */
+    public Alert getSubmitAnswerSuccessAlert() {
+        if (submitAnswerSuccessAlert == null) {//GEN-END:|57-getter|0|57-preInit
+            // write pre-init user code here
+            submitAnswerSuccessAlert = new Alert("Success!", "Answer submited successfuly!", getSuccess(), null);//GEN-BEGIN:|57-getter|1|57-postInit
+            submitAnswerSuccessAlert.setTimeout(Alert.FOREVER);//GEN-END:|57-getter|1|57-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|57-getter|2|
+        return submitAnswerSuccessAlert;
+    }
+    //</editor-fold>//GEN-END:|57-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: submitAnswerErrorAlert ">//GEN-BEGIN:|58-getter|0|58-preInit
+    /**
+     * Returns an initiliazed instance of submitAnswerErrorAlert component.
+     * @return the initialized component instance
+     */
+    public Alert getSubmitAnswerErrorAlert() {
+        if (submitAnswerErrorAlert == null) {//GEN-END:|58-getter|0|58-preInit
+            // write pre-init user code here
+            submitAnswerErrorAlert = new Alert("Error Submiting Answer", "You have already answered this question!", getError(), null);//GEN-BEGIN:|58-getter|1|58-postInit
+            submitAnswerErrorAlert.setTimeout(Alert.FOREVER);//GEN-END:|58-getter|1|58-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|58-getter|2|
+        return submitAnswerErrorAlert;
+    }
+    //</editor-fold>//GEN-END:|58-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: error ">//GEN-BEGIN:|61-getter|0|61-preInit
+    /**
+     * Returns an initiliazed instance of error component.
+     * @return the initialized component instance
+     */
+    public Image getError() {
+        if (error == null) {//GEN-END:|61-getter|0|61-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|61-getter|1|61-@java.io.IOException
+                error = Image.createImage("/gr/academic/city/msc/industrial/mobileclickers/mobilemodule/images/error_alert.png");
+            } catch (java.io.IOException e) {//GEN-END:|61-getter|1|61-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|61-getter|2|61-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|61-getter|3|
+        return error;
+    }
+    //</editor-fold>//GEN-END:|61-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: success ">//GEN-BEGIN:|62-getter|0|62-preInit
+    /**
+     * Returns an initiliazed instance of success component.
+     * @return the initialized component instance
+     */
+    public Image getSuccess() {
+        if (success == null) {//GEN-END:|62-getter|0|62-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|62-getter|1|62-@java.io.IOException
+                success = Image.createImage("/gr/academic/city/msc/industrial/mobileclickers/mobilemodule/images/success.png");
+            } catch (java.io.IOException e) {//GEN-END:|62-getter|1|62-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|62-getter|2|62-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|62-getter|3|
+        return success;
+    }
+    //</editor-fold>//GEN-END:|62-getter|3|
+
     /**
      * Returns a display instance.
      * @return the display instance.
@@ -412,10 +503,15 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
         return webService;
     }
 
-    private void getNumberOfAnswers() {
+    private void getNumberOfAnswers() throws Exception {
         try {
             questionCode = getQuestionCodeTextField().getString();
             int numberOfAnswers = getWebService().getNumberOfAnswer(questionCode);
+
+            if (numberOfAnswers == -1) {
+                resetForms();
+                throw new Exception();
+            }
 
             char answerChar = 'A';
 
@@ -428,14 +524,52 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
         }
     }
 
-    private void submitAnswer() {
+    private void submitAnswer() throws Exception {
         try {
-            String answer = answersList.getString(answersList.getSelectedIndex());
-            String uniqueSubmissionCode = System.getProperty("microedition.platform");
+            String answer = getAnswersList().getString(getAnswersList().getSelectedIndex());
 
-            webService.submitAnswer(questionCode, answer, uniqueSubmissionCode);
+            String uniqueSubmissionCode = "";
+
+            if (System.getProperty("phone.imei") != null) {
+                uniqueSubmissionCode += System.getProperty("phone.imei");
+            }
+            if (System.getProperty("com.nokia.IMEI") != null) {
+                uniqueSubmissionCode += System.getProperty("com.nokia.IMEI");
+            }
+            if (System.getProperty("com.sonyericsson.imei") != null) {
+                uniqueSubmissionCode += System.getProperty("com.sonyericsson.imei");
+            }
+            if (System.getProperty("com.samsung.imei") != null) {
+                uniqueSubmissionCode += System.getProperty("com.samsung.imei");
+            }
+            if (System.getProperty("com.siemens.imei") != null) {
+                uniqueSubmissionCode += System.getProperty("com.siemens.imei");
+            }
+            if (System.getProperty("com.nokia.mid.imei") != null) {
+                uniqueSubmissionCode += System.getProperty("com.nokia.mid.imei");
+            }
+            if (System.getProperty("com.siemens.IMEI") != null) {
+                uniqueSubmissionCode += System.getProperty("com.siemens.IMEI");
+            }
+            if (System.getProperty("IMEI") != null) {
+                uniqueSubmissionCode += System.getProperty("IMEI");
+            }
+            if (System.getProperty("com.motorola.IMEI") != null) {
+                uniqueSubmissionCode += System.getProperty("com.motorola.IMEI");
+            }
+
+            int submitAnswer = getWebService().submitAnswer(questionCode, answer, uniqueSubmissionCode);
+            resetForms();
+            if (submitAnswer == -1) {
+                throw new Exception();
+            }
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void resetForms() {
+        getAnswersList().deleteAll();
+        getQuestionCodeTextField().setString(null);
     }
 }
