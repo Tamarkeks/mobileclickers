@@ -11,7 +11,7 @@
                         <Property name="eventHandler" typeID="C#EventHandler" value="R15"/>
                         <Component componentID="15" typeID="C#SwitchDisplayableEventHandler">
                             <Property name="eventSource" typeID="C#EventSource" value="R3"/>
-                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R63"/>
                         </Component>
                     </Component>
                     <Component componentID="4" typeID="C#MobileDeviceResumeEventSource"/>
@@ -28,7 +28,7 @@
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VselectQuestionForm"/>
                     <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
                     <Property name="commands" typeID="1C#CommandEventSource" value="A2:3_R173_R21"/>
-                    <Property name="title" typeID="Pjava.lang.String" value="VMobile Clickers"/>
+                    <Property name="title" typeID="Pjava.lang.String" value="VClick'N'Gage"/>
                     <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
                     <Property name="items" typeID="1Cjavax.microedition.lcdui.Item" value="A1:3_R18"/>
                     <Component componentID="17" typeID="C#CommandEventSource">
@@ -179,6 +179,24 @@
                     <Property name="string" typeID="Pjava.lang.String" value="VAnswer submited successfuly!"/>
                     <Property name="timeout" typeID="Pint" value="V-2"/>
                 </Component>
+                <Component componentID="63" typeID="Corg.netbeans.microedition.lcdui.SplashScreen">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VsplashScreen"/>
+                    <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
+                    <Property name="commands" typeID="1C#CommandEventSource" value="A1:3_R65"/>
+                    <Property name="title" typeID="Pjava.lang.String" value="VClick'N'Gage"/>
+                    <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
+                    <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R67"/>
+                    <Property name="text" typeID="Pjava.lang.String" value="VWelcome to Click'N'Gage!"/>
+                    <Component componentID="65" typeID="C#SplashScreenDismissCommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R66"/>
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R63"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R64"/>
+                        <Component componentID="66" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R65"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
+                        </Component>
+                    </Component>
+                </Component>
             </Component>
             <Component componentID="11" typeID="C#CommandsCategory">
                 <Component componentID="16" typeID="Cjavax.microedition.lcdui.Command">
@@ -217,6 +235,12 @@
                     <Property name="priority" typeID="Pint" value="V0"/>
                     <Property name="ordinary" typeID="Pboolean" value="Vfalse"/>
                 </Component>
+                <Component componentID="64" typeID="C#SplashScreenDismissCommand">
+                    <Property name="label" typeID="Pjava.lang.String" value="VDismiss"/>
+                    <Property name="type" typeID="Pint" value="V4"/>
+                    <Property name="priority" typeID="Pint" value="V0"/>
+                    <Property name="ordinary" typeID="Pboolean" value="Vfalse"/>
+                </Component>
             </Component>
             <Component componentID="12" typeID="C#ResourcesCategory">
                 <Component componentID="28" typeID="Corg.netbeans.microedition.util.SimpleCancellableTask">
@@ -242,9 +266,24 @@
                     <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
                     <Property name="resourcePath" typeID="Pjava.lang.String" value="V/gr/academic/city/msc/industrial/mobileclickers/mobilemodule/images/error_alert.png"/>
                 </Component>
+                <Component componentID="67" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vlogo"/>
+                    <Property name="codeGenerated" typeID="Pboolean" value="Vtrue"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/gr/academic/city/msc/industrial/mobileclickers/mobilemodule/images/logo.png"/>
+                </Component>
             </Component>
             <Component componentID="13" typeID="C#DatabindingCategory"/>
         </Component>
     </Document>
-    <FlowScene version="1"/>
+    <FlowScene version="1">
+        <Node componentID="63" descriptorID="componentNode63" x="304" y="278"/>
+        <Node componentID="45" descriptorID="componentNode45" x="347" y="439"/>
+        <Node componentID="23" descriptorID="componentNode23" x="993" y="155"/>
+        <Node componentID="58" descriptorID="componentNode58" x="645" y="297"/>
+        <Node componentID="57" descriptorID="componentNode57" x="645" y="32"/>
+        <Node componentID="2" descriptorID="componentNode2" x="34" y="297"/>
+        <Node componentID="55" descriptorID="componentNode55" x="34" y="32"/>
+        <Node componentID="14" descriptorID="componentNode14" x="347" y="155"/>
+        <Node componentID="34" descriptorID="componentNode34" x="993" y="439"/>
+    </FlowScene>
 </VisualDesign>

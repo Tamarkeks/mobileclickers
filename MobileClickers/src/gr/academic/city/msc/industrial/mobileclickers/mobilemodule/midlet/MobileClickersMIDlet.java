@@ -9,6 +9,7 @@ import gr.academic.city.msc.industrial.mobileclickers.mobilemodule.generated.ws.
 import java.rmi.RemoteException;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
+import org.netbeans.microedition.lcdui.SplashScreen;
 import org.netbeans.microedition.lcdui.WaitScreen;
 import org.netbeans.microedition.util.SimpleCancellableTask;
 
@@ -27,16 +28,18 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
     private WaitScreen submitAnswerWaitScreen;
     private List answersList;
     private Alert getQuestionErrorAlert;
-    private Alert submitAnswerSuccessAlert;
     private Alert submitAnswerErrorAlert;
+    private Alert submitAnswerSuccessAlert;
+    private SplashScreen splashScreen;
     private Command exitCommand;
     private Command getQuestionCommand;
     private Command submitAnswerCommand;
     private SimpleCancellableTask getQuestionTask;
     private SimpleCancellableTask submitAnswerTask;
     private Image clock;
-    private Image error;
     private Image success;
+    private Image error;
+    private Image logo;
     //</editor-fold>//GEN-END:|fields|0|
 
     /**
@@ -65,7 +68,7 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
      */
     public void startMIDlet() {//GEN-END:|3-startMIDlet|0|3-preAction
         // write pre-action user code here
-        switchDisplayable(null, getSelectQuestionForm());//GEN-LINE:|3-startMIDlet|1|3-postAction
+        switchDisplayable(null, getSplashScreen());//GEN-LINE:|3-startMIDlet|1|3-postAction
         // write post-action user code here
     }//GEN-BEGIN:|3-startMIDlet|2|
     //</editor-fold>//GEN-END:|3-startMIDlet|2|
@@ -140,21 +143,27 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
                 // write pre-action user code here
                 switchDisplayable(null, getGetQuestionWaitScreen());//GEN-LINE:|7-commandAction|14|21-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|15|36-preAction
+            }//GEN-BEGIN:|7-commandAction|15|65-preAction
+        } else if (displayable == splashScreen) {
+            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|15|65-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getSelectQuestionForm());//GEN-LINE:|7-commandAction|16|65-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|17|36-preAction
         } else if (displayable == submitAnswerWaitScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|15|36-preAction
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|17|36-preAction
                 // write pre-action user code here
-                switchDisplayable(getSubmitAnswerErrorAlert(), getSelectQuestionForm());//GEN-LINE:|7-commandAction|16|36-postAction
+                switchDisplayable(getSubmitAnswerErrorAlert(), getSelectQuestionForm());//GEN-LINE:|7-commandAction|18|36-postAction
                 // write post-action user code here
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|17|35-preAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|19|35-preAction
                 // write pre-action user code here
-                switchDisplayable(getSubmitAnswerSuccessAlert(), getSelectQuestionForm());//GEN-LINE:|7-commandAction|18|35-postAction
+                switchDisplayable(getSubmitAnswerSuccessAlert(), getSelectQuestionForm());//GEN-LINE:|7-commandAction|20|35-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|19|7-postCommandAction
-        }//GEN-END:|7-commandAction|19|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|21|7-postCommandAction
+        }//GEN-END:|7-commandAction|21|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|20|
-    //</editor-fold>//GEN-END:|7-commandAction|20|
+    }//GEN-BEGIN:|7-commandAction|22|
+    //</editor-fold>//GEN-END:|7-commandAction|22|
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: selectQuestionForm ">//GEN-BEGIN:|14-getter|0|14-preInit
     /**
@@ -164,7 +173,7 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
     public Form getSelectQuestionForm() {
         if (selectQuestionForm == null) {//GEN-END:|14-getter|0|14-preInit
             // write pre-init user code here
-            selectQuestionForm = new Form("Mobile Clickers", new Item[] { getQuestionCodeTextField() });//GEN-BEGIN:|14-getter|1|14-postInit
+            selectQuestionForm = new Form("Click\'N\'Gage", new Item[] { getQuestionCodeTextField() });//GEN-BEGIN:|14-getter|1|14-postInit
             selectQuestionForm.addCommand(getExitCommand());
             selectQuestionForm.addCommand(getGetQuestionCommand());
             selectQuestionForm.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
@@ -449,6 +458,44 @@ public class MobileClickersMIDlet extends MIDlet implements CommandListener {
         return success;
     }
     //</editor-fold>//GEN-END:|62-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: splashScreen ">//GEN-BEGIN:|63-getter|0|63-preInit
+    /**
+     * Returns an initiliazed instance of splashScreen component.
+     * @return the initialized component instance
+     */
+    public SplashScreen getSplashScreen() {
+        if (splashScreen == null) {//GEN-END:|63-getter|0|63-preInit
+            // write pre-init user code here
+            splashScreen = new SplashScreen(getDisplay());//GEN-BEGIN:|63-getter|1|63-postInit
+            splashScreen.setTitle("Click\'N\'Gage");
+            splashScreen.setCommandListener(this);
+            splashScreen.setImage(getLogo());
+            splashScreen.setText("Welcome to Click\'N\'Gage!");//GEN-END:|63-getter|1|63-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|63-getter|2|
+        return splashScreen;
+    }
+    //</editor-fold>//GEN-END:|63-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: logo ">//GEN-BEGIN:|67-getter|0|67-preInit
+    /**
+     * Returns an initiliazed instance of logo component.
+     * @return the initialized component instance
+     */
+    public Image getLogo() {
+        if (logo == null) {//GEN-END:|67-getter|0|67-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|67-getter|1|67-@java.io.IOException
+                logo = Image.createImage("/gr/academic/city/msc/industrial/mobileclickers/mobilemodule/images/logo.png");
+            } catch (java.io.IOException e) {//GEN-END:|67-getter|1|67-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|67-getter|2|67-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|67-getter|3|
+        return logo;
+    }
+    //</editor-fold>//GEN-END:|67-getter|3|
 
     /**
      * Returns a display instance.
