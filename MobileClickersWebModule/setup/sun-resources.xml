@@ -10,5 +10,5 @@
         <property name="URL" value="jdbc:mysql://localhost:3306/mobile_clickers"/>
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
     </jdbc-connection-pool>
-    <jdbc-resource enabled="true" pool-name="mysql_mobile_clickers_rootPool" jndi-name="mobile_clickers"  object-type="user"/>
+    <jdbc-resource enabled="true" pool-name="mysql_mobile_clickers_rootPool" jndi-name="clickers"  object-type="user"/>
 </resources>
