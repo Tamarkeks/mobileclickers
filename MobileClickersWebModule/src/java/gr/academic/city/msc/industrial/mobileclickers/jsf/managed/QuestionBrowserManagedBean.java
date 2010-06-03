@@ -38,6 +38,7 @@ public class QuestionBrowserManagedBean implements Serializable {
     private long courseID = 0;
     private long tagID;
     private String errorMessage;
+    private String issueCode;
 
     /** Creates a new instance of QuestionBrowserManagedBean */
     public QuestionBrowserManagedBean() {
@@ -135,14 +136,23 @@ public class QuestionBrowserManagedBean implements Serializable {
         this.tagsForCourse = tagsForCourse;
     }
 
+    public String getIssueCode() {
+        return issueCode;
+    }
+
+    public void setIssueCode(String issueCode) {
+        this.issueCode = issueCode;
+    }
+
     public String issueQuestionActionHandler() {
         try {
             errorMessage = null;
+            issueCode = null;
 
             FacesContext context = FacesContext.getCurrentInstance();
             LecturerManagedBean lmb = context.getApplication().evaluateExpressionGet(context, "#{lecturerManagedBean}", LecturerManagedBean.class);
-            String code = questionService.issueQuestion(lmb.getLecturerID(), questionID, courseID);
-            return code;
+            issueCode = questionService.issueQuestion(lmb.getLecturerID(), questionID, courseID);
+            return null;
         } catch (QuestionException ex) {
             errorMessage = ex.getMessage();
         }

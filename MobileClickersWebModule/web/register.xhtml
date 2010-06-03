@@ -51,6 +51,9 @@
 
                             <label>Password:</label>
                             <h:inputSecret value="#{accountManagedBean.password}"/>
+
+                            <label>Access Code:</label>
+                            <h:inputText value="#{accountManagedBean.accessCode}"/>
                         </h:panelGrid>
                         <h:commandButton value="Register" action="#{accountManagedBean.registerActionHandler}" />
 

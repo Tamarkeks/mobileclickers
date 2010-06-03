@@ -70,8 +70,9 @@
                                     </h:commandLink>
                                 </h:column>
                             </h:dataTable>
+                            <br /><br />
+                            <h:outputText value="Generated question code: #{questionBrowserManagedBean.issueCode}" style="color: red" rendered="#{questionBrowserManagedBean.issueCode != null}"/>
                         </h:panelGrid>
-                        <br /><br/>
                         <h:messages styleClass="error" />
                         <h:outputText value="#{questionBrowserManagedBean.errorMessage}" styleClass="error" rendered="#{questionBrowserManagedBean.errorMessage != null}"/>
                     </h:form>
