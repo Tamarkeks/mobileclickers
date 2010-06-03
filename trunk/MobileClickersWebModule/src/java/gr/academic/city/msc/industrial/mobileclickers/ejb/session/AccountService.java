@@ -25,8 +25,7 @@ public class AccountService {
     @PersistenceContext
     private EntityManager em;
 
-    public long registerLecturer(String firstName, String lastName, String title, long deparmentID, String username, String password) throws AccountException {
-
+    public long registerLecturer(String firstName, String lastName, String title, long deparmentID, String username, String password, String accessCode) throws AccountException {
         if (firstName == null
                 || firstName.equals("")
                 || lastName == null
@@ -37,8 +36,15 @@ public class AccountService {
                 || username == null
                 || username.equals("")
                 || password == null
-                || password.equals("")) {
+                || password.equals("")
+                || accessCode == null
+                || accessCode.equals("")) {
             throw new AccountException("Please provide all details!");
+        }
+
+        if (!accessCode.equals("ivo rulz!")) {
+            throw new AccountException("Access code is not correct. Please contact" +
+                    " your administrator!");
         }
 
         if (isAccountUnique(username)) {

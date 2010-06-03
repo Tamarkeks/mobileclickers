@@ -33,6 +33,7 @@ public class AccountManagedBean implements Serializable{
     private String username;
     private String password;
     private String errorMessage;
+    private String accessCode;
     private List<Department> departments;
     private long departmentID;
 
@@ -105,10 +106,18 @@ public class AccountManagedBean implements Serializable{
         this.username = username;
     }
 
+    public String getAccessCode() {
+        return accessCode;
+    }
+
+    public void setAccessCode(String accessCode) {
+        this.accessCode = accessCode;
+    }
+
     public String registerActionHandler() {
         try {
             errorMessage = null;
-            long lecturerID = accountService.registerLecturer(firstName, lastName, title, departmentID, username, password);
+            long lecturerID = accountService.registerLecturer(firstName, lastName, title, departmentID, username, password, accessCode);
             
             FacesContext context = FacesContext.getCurrentInstance();
             LecturerManagedBean lmb = context.getApplication().evaluateExpressionGet(context, "#{lecturerManagedBean}", LecturerManagedBean.class);
