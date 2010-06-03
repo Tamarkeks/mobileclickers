@@ -14,7 +14,7 @@ public class MobileClickersWSService_Stub implements MobileClickersWSService, ja
 
     public MobileClickersWSService_Stub() {
         _propertyNames = new String[] { ENDPOINT_ADDRESS_PROPERTY };
-        _propertyValues = new Object[] { "http://localhost:8080/MobileClickersWebModule/MobileClickersWSService" };
+        _propertyValues = new Object[] { "http://212.251.20.236:8080/clickngage/MobileClickersWSService" };
     }
 
     public void _setProperty( String name, Object value ) {
@@ -109,10 +109,10 @@ public class MobileClickersWSService_Stub implements MobileClickersWSService, ja
     protected static final QName _qname_submitAnswerResponse = new QName( "http://webservices.ejb.mobileclickers.industrial.msc.city.academic.gr/", "submitAnswerResponse" );
     protected static final QName _qname_getNumberOfAnswer = new QName( "http://webservices.ejb.mobileclickers.industrial.msc.city.academic.gr/", "getNumberOfAnswer" );
     protected static final QName _qname_submitAnswer = new QName( "http://webservices.ejb.mobileclickers.industrial.msc.city.academic.gr/", "submitAnswer" );
-    protected static final Element _type_submitAnswer;
     protected static final Element _type_submitAnswerResponse;
-    protected static final Element _type_getNumberOfAnswer;
+    protected static final Element _type_submitAnswer;
     protected static final Element _type_getNumberOfAnswerResponse;
+    protected static final Element _type_getNumberOfAnswer;
 
     static {
         _type_submitAnswerResponse = new Element( _qname_submitAnswerResponse, _complexType( new Element[] {

@@ -7,6 +7,6 @@
         <property name="cldc11" value="true"/>
     </client>
     <services>
-        <service file="MobileClickersWSService.wsdl" url="http://localhost:8080/MobileClickersWebModule/MobileClickersWSService?WSDL"/>
+        <service file="MobileClickersWSService.wsdl" url="http://212.251.20.236:8080/clickngage/MobileClickersWSService?WSDL"/>
     </services>
 </wsclientconfig>
