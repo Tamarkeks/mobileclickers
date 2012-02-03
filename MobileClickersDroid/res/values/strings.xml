@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MobileClickersDroid</string>
+    <string name="main_logo_cd">main logo image</string>
+    <string name="welcome_message">Welcome to Click\'N\'Gage!</string>
+    <string name="select_question">Question Code:</string>
+    <string name="type_in_the_question_code">Type in the question code</string>
+    <string name="fetch_question">Fetch Question</string>
+    <string name="submit_answer">Submit Answer</string>
+
+</resources>
