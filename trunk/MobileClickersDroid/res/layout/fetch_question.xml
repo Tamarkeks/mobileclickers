@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView android:text="@string/select_question"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dip" />
+    
+    <EditText android:id="@+id/questionCodeTextView"
+        android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:hint="@string/type_in_the_question_code" />
+    
+    <Button android:text="@string/fetch_question"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="fetchQuestion"
+        android:padding="10dip"
+        android:layout_marginTop="10dip" />
+
+</LinearLayout>
